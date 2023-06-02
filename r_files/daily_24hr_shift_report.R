@@ -1,95 +1,9 @@
 
-library("xlsx")
-library("plyr")
-library("dplyr")
-library("tidyr")
-library("splitstackshape")
-library("magrittr")
-library("gmodels")
-library("descr")
-library("arcgisbinding")
-library("sp")
-library("spdep")
-library("rgdal")
-library("maptools")
-library("ggmap")
-library("lubridate")
-library("stringr")
-library("foreign")#to load db file
-library("sf")
-library("tidyverse")
-library(lattice)
-library(ggpubr)
-theme_set(theme_pubr())
-
-#Loading Historical Data
-#library("RSQLite")
-#cons.police <- dbConnect(drv=RSQLite::SQLite(), dbname="U:/Database Files/Police.db")
-#theft_hist <- dbGetQuery(cons.police, "select * from 
-       # PoliceRuns WHERE DisptachedTime1 >= '2021-01-01 00:00:00' AND 
-        #DisptachedTime1 <= '2021-12-31 11:59:59'
-        #AND [Incident Type] == 'Theft - From a Motor Vehicle'")
-#theft_hist <- theft_hist[, c(1:7, 9,10)]
-#names(theft_hist)[9] <- "Lon"
-#theft_hist$Lat <- as.numeric(theft_hist$Lat)
-#theft_hist$Lon <- as.numeric(theft_hist$Lon)
-#auto_theft_hist <- dbGetQuery(cons.police, "select * from 
-                             #PoliceRuns WHERE DisptachedTime1 >= '2021-03-01 00:00:00' AND 
-                            # DisptachedTime1 <= '2021-12-31 11:59:59'
-                            # AND [Incident Type] == 'Theft - Motor Vehicle'")
-#auto_theft_hist <- auto_theft_hist[, c(1:7, 9,10)]
-#names(auto_theft_hist)[9] <- "Lon"
-#auto_theft_hist$Lat <- as.numeric(auto_theft_hist$Lat)
-#auto_theft_hist$Lon <- as.numeric(auto_theft_hist$Lon)
-#robbery_hist <- dbGetQuery(cons.police, "select * from 
-                            # PoliceRuns WHERE DisptachedTime1 >= '2018-12-01 00:00:00' AND 
-                             #DisptachedTime1 <= '2021-12-31 11:59:59'
-                             #AND [Incident Type] == 'Robbery'")
-#robbery_hist <- robbery_hist[, c(1:7, 9,10)]
-#names(robbery_hist)[9] <- "Lon"
-#robbery_hist$Lat <- as.numeric(robbery_hist$Lat)
-#robbery_hist$Lon <- as.numeric(robbery_hist$Lon)
-#dbDisconnect(cons.police)
-#names(burglaries_hist)[10] <- "Lon"
-
-#burgs_hist <- burglaries_hist %>%
- # dplyr::select(1:7, 9:10)%>%
- # mutate(Lat = as.numeric(Lat), 
-  #       Lon = as.numeric(Lon))
-         #Date = mdy_hms(Date))
-
-##Reading in the older data
-##To Combine all Files if needed#
-#police_24drive_old <- "C:/Users/tsink/Google Drive/Police/24_hr_shift_report"
-
-#oldNames<-list.files(police_24drive, full.names = TRUE) 
-#newNames<-paste(oldNames,".csv", sep="")
-#for (i in 1:length(oldNames)) file.rename(oldNames[i],newNames[i])
-
-#Create a character vector of all EXCEL files
-#filenames_old <- list.files(path = police_24drive_old, pattern=".csv", full.names=T)
-
-#Read the contents of all EXCEl worksheets into a list
-#df.lists_old  <- lapply(filenames_old, function(x) read.csv(file=x, header=TRUE, stringsAsFactors = FALSE))
-
-#Bind the rows of the data.frame lists created from the EXCEL sheets
-#daily_24hr_old  <- rbind.fill(df.lists_old)
-#names(daily_24hr_old) <- names(burgs_hist)
-
-#daily_24hr_old <- daily_24hr_old %>%
- # filter(grepl("Burglary", `Incident Type`))%>%
- # group_by(IncidentNu, `Incident Type`, Address, Lat, Lon)%>%
- # filter(row_number(IncidentNu)==1)
-
-#run_id <- burgs_hist$IncidentNu
-
-#daily_24hr_old <- daily_24hr_old[!(daily_24hr_old$IncidentNu %in% run_id),]
-
-#daily_24hr_old <- bind_rows(daily_24hr_old, burgs_hist)
+source("r_files/package_load.R")
 
 
-library("RSQLite")
-cons.police <- dbConnect(drv=RSQLite::SQLite(), dbname="U:/Database Files/Police.db")
+
+cons.police <- dbConnect(drv=RSQLite::SQLite(), dbname=db_dir)
 #dbWriteTable(cons.police, "Weekly_Hot_Spot", burgs_hist, overwrite = TRUE )
 burgs_hist <- dbGetQuery(cons.police, "SELECT * FROM Weekly_Hot_Spot WHERE [Incident Type] == 'Burglary'")
 burgs_hist <- burgs_hist[, c(1:10)]
@@ -99,14 +13,9 @@ burgs_hist$Date2 <- ymd_hms(burgs_hist$Date2)
 #burgs_hist <- burgs_hist[!grepl("Robbery", burgs_hist$`Incident Type`),]
 #burgs_hist$Count <- 1
 
-#jan_calls <- read.csv("C:/Users/tsink/Google Drive/Police/24_hr_shift_report/download/jan.csv", header = TRUE)
-#jan_calls <- jan_calls[, c(1, 5:12)]
-#names(jan_calls) <- names(burgs_hist)
-#jan_burg <- jan_calls %>%
-  #group_by(IncidentNu, `Incident Type`, Address, Lat, Lon)%>%
-  #filter(row_number()==1) 
+
 ##Reading in the data
-police_24drive <- "C:/Users/tsink/Google Drive/Police/24_hr_shift_report/download"
+police_24drive <- paste(drive_dir, "Police/24_hr_shift_report/download", sep = "")
 
 oldNames<-list.files(police_24drive, full.names = TRUE) 
 newNames<-paste(oldNames,".csv", sep="")
@@ -151,7 +60,7 @@ daily_burgs <- daily_burgs[!grepl("POLICE", daily_burgs$Address),]
 daily_burgs <- daily_burgs[!grepl("2023-00009449", daily_burgs$IncidentNu),]
  
 ## Export for datacube and emerging hot spot analysis ##
-city_bndy <- st_read("U:/Mapping/Covington_Boundary.shp")
+city_bndy <- st_read(geo_dir, "City_Covington")
 city_bndy <- st_transform(city_bndy, crs = 4326)
 
 burgs_sf <- st_as_sf(daily_burgs, coords = c("Lon", "Lat"),  crs = 4326)
@@ -159,14 +68,11 @@ burgs_sf <- st_join(burgs_sf, city_bndy, join = st_within)%>%
   filter(!is.na(CITY))
 
 st_write(burgs_sf, 
-         "U:/Mapping/Police", 
+         map_dir, 
          layer = "burglaries_daily", 
          driver = "ESRI Shapefile", 
          delete_layer = TRUE)
 
-test_max <- max(ymd(burgs_sf$Date))
-test_min <- min(ymd(burgs_sf$Date))
-test_max - test_min
 
 
 ### Motor Vehicle Thefts ----------------
@@ -207,15 +113,10 @@ thefts_sf <- st_join(thefts_sf, city_bndy, join = st_within)%>%
   filter(!is.na(CITY))
 
 st_write(thefts_sf, 
-         "U:/Mapping/Police", 
+         map_dir, 
          layer = "vehicle_thefts_daily", 
          driver = "ESRI Shapefile", 
          delete_layer = TRUE)
-
-
-test_max <- max(ymd(thefts_sf$Date))
-test_min <- min(ymd(thefts_sf$Date))
-test_max - test_min
 
 
 ### Robberies ----------------
@@ -256,15 +157,11 @@ robs_sf <- st_join(robs_sf, city_bndy, join = st_within)%>%
   filter(!is.na(CITY))
 
 st_write(robs_sf, 
-         "U:/Mapping/Police", 
+         map_dir, 
          layer = "robberies_daily", 
          driver = "ESRI Shapefile", 
          delete_layer = TRUE)
 
-
-test_max <- max(ymd(robs_sf$Date))
-test_min <- min(ymd(robs_sf$Date))
-test_max - test_min
 
 ### Theft from Motor Vehicle ----------------
 theft_hist <- dbGetQuery(cons.police, "SELECT * FROM Weekly_Hot_Spot 
@@ -305,15 +202,11 @@ vehicle_sf <- st_join(vehicle_sf, city_bndy, join = st_within)%>%
   filter(!is.na(CITY))
 
 st_write(vehicle_sf, 
-         "U:/Mapping/Police", 
+         map_dir, 
          layer = "thefts_from_vehicle_daily", 
          driver = "ESRI Shapefile", 
          delete_layer = TRUE)
 
-
-test_max <- max(ymd(vehicle_sf$Date))
-test_min <- min(ymd(vehicle_sf$Date))
-test_max - test_min
 
 
 daily_burgs_hist <- daily_burgs_hist[!grepl("2023-00009449", daily_burgs_hist$IncidentNu),]
@@ -324,18 +217,21 @@ weekly_data_update$Date<- format(strptime(weekly_data_update$Date, format='%Y-%m
 
 
 library("RSQLite")
-cons.police <- dbConnect(drv=RSQLite::SQLite(), dbname="U:/Database Files/Police.db")
+cons.police <- dbConnect(drv=RSQLite::SQLite(), dbname=db_dir)
 dbWriteTable(cons.police, "Weekly_Hot_Spot", weekly_data_update, overwrite = TRUE)
 crimes <- dbGetQuery(cons.police, 'select * from Weekly_Hot_Spot')
 dbDisconnect(cons.police)
+
+
+
 #////////////////////////////////////
 ##1. Snapshot--Prepare Crimes for Mapping----
 #///////////////////////////////////
-city <- st_read("K:/GeoDatabases/Boundaries.gdb", "City_Covington")
+city <- st_read(geo_dir, "City_Covington")
 city_sf <- st_transform(city, crs = 4326)
-police <- st_read("U:/Mapping/Police/police_sectors.shp")
+police <- st_read(paste(map_dir, "police_sectors.shp", sep=""))
 police_sf <- st_transform(police, crs = 4326)
-neigh <- st_read("K:/GeoDatabases/Boundaries.gdb", "Neighborhoods_Covington")
+neigh <- st_read(geo_dir, "Neighborhoods_Covington")
 neigh_sf <- st_transform(neigh, crs = 4326)
 
 
@@ -365,103 +261,6 @@ mutate(lat = unlist(map(crimes$geometry,2)),
 crimes_df$`Incident Type`[crimes_df$`Incident Type` == 'Theft-From a Motor Vehicle'] <- "Theft From MV"
 crimes_df$`Incident Type`[crimes_df$`Incident Type` == 'Theft-Motor Vehicle'] <- "Theft of MV"
 
-## D-1. Getting Google Map----
-register_google(key = "AIzaSyBmtxptr4kz270fbgUtYVHS-jbth-8kp5Y", 
-                account_type = "premium", 
-                day_limit = 100000, 
-                write = FALSE)
-
-bound <- c(left = min(crimes_df$lon) - 0.001, bottom = min(crimes_df$lat) - 0.001,
-           right = max(crimes_df$lon) + 0.001, top = max(crimes_df$lat) + 0.001)
-lat_avg <- mean(crimes_df$lat - 0.015 )
-lon_avg <- mean(crimes_df$lon)
-
-#lat_avg = 39.04989
-#lon_avg = -84.51116
-
-crimes_sf <- st_as_sf(crimes, coords = c("Lon", "Lat"),  crs = 4326)
-
-neigh <- st_read("U:/Mapping/Neighborhoods.shp")
-neighPolySp <- st_transform(neigh, crs = 4326)
-
-crimes <- st_join(crimes_sf, neighPolySp, join = st_within)
-crimes_unpack <- crimes %>%
-  mutate(Lat = unlist(map(crimes$geometry,2)),
-         Lon = unlist(map(crimes$geometry,1)))%>%
-  st_drop_geometry()%>%
-  filter(!is.na(NbhdLabel))
-
-
-bbox <- make_bbox(crimes_unpack$Lon, crimes_unpack$Lat, f = 0.01)
-crimes_map1 <- get_map(bbox)
-ggmap(crimes_map1)  
-
-covington_map <- get_map("covington ky")
-bound <- c(left = min(crimes_unpack$Lon) - 0.001, bottom = min(crimes_unpack$Lat) - 0.001,
-           right = max(crimes_unpack$Lon) + 0.001, top = max(crimes_unpack$Lat) + 0.001)
-lat_avg <- mean(crimes_unpack$Lat - 0.050 )
-lon_avg <- mean(crimes_unpack$Lon)
-
-style_selection_1 <- paste("feature:poi|element:all|visibility:off&",
-                           "style=feature:administrative|element:labels|visibility:off&",
-                           "style=feature:road|element:labels|visibility:off&",
-                           "style=feature:water|element:labels|visibility:off",
-                           sep="")
-
-#style_selection <- 'feature:poi|element:all|visibility:off&style=feature:administrative|element:labels|visibility:off&style=feature:road|element:labels|visibility:off&style=feature:water|element:labels|visibility:off'
-cov_crime <- ggmap(get_googlemap(center = c(lon = lon_avg, lat = lat_avg),
-                            zoom = 12,
-                            maptype ='roadmap',
-                            color = 'bw', 
-                            style = style_selection_1))
-cov_crime +
-  geom_sf(data = city_sf, fill = NA, lwd = 0.5, color = "black", inherit.aes = FALSE)
-##Crime map by incident type
-crime_ggmap <- cov_crime  +
-  geom_point(data = crimes_df, aes(x=lon, y=lat, fill= `Incident Type`), pch=21, size = 1.5, colour="black")+
-  facet_wrap(~`Incident Type`)+
-  geom_sf(data = police_sf, fill = NA, lwd = 0.5, color = "black", inherit.aes = FALSE)+
-
-ggtitle("Crimes")+
-  theme_bw()+
-  theme(axis.text.x = element_blank(), 
-        axis.text.y = element_blank(),
-        axis.ticks = element_blank(),
-        axis.title = element_blank(),
-        plot.title = element_text(hjust = 0.5, size = 16, color = "black", face = "bold"),
-        strip.text = element_text(size = 10, face = "italic"),
-        legend.position = "right",
-        #legend.text = element_blank(),
-        legend.box.background = element_rect(color = "black", size = 1),
-        panel.border = element_rect(color = "black", fill=NA, size=1),
-        plot.background = element_rect(color = "black", size = 1))+
-  labs(caption = paste(today()))
-max_lon <- max(pidn_map$lon)+ 0.05
-min_lon <- min(pidn_map$lon)- 0.05
-
-max_lat <- max(pidn_map$lat)+ 0.01
-min_lat <- min(pidn_map$lat)- 0.01
-
-style_selection_1 <- paste("feature:poi|element:all|visibility:off&",
-                           "style=feature:administrative|element:labels|visibility:off&",
-                           "style=feature:road|element:labels|visibility:off&",
-                           "style=feature:water|element:labels|visibility:off",
-                           sep="")
-
-#style_selection <- 'feature:poi|element:all|visibility:off&style=feature:administrative|element:labels|visibility:off&style=feature:road|element:labels|visibility:off&style=feature:water|element:labels|visibility:off'
-cov_map <- ggmap(get_googlemap(center = c(lon = lon_avg, lat = lat_avg),
-                               zoom = 12,
-                               maptype ='roadmap',
-                               color = 'bw', 
-                               style = style_selection_1))+
-  #geom_sf(data = city_sf, fill = NA, lwd = 0.6, color = "black", inherit.aes = FALSE)+
-  
-  
-#save(cov_crime, file = "U:/cov_crime.RData")
-#load(file = "U:/cov_crime.RData", .GlobalEnv)
-#save(cov_gg_base, file = "U:/cov_ggmap_bw.RData")
-#load(file = "U:/cov_ggmap_bw.RData", .GlobalEnv)
-#cov_gg_base + geom_sf(data = city_sf, fill = NA, lwd = 1, color = 'black',inherit.aes = FALSE )
 
 ##//////////////////////////////////////##
 ##2. Snapshot--Heat map crimes by Type ----
