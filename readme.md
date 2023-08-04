@@ -22,6 +22,8 @@
 
 # Data Collection
 
+![](images/power_automate_overview.png)
+
 # Data Processing
 
 # Weekly Data Snapshot
