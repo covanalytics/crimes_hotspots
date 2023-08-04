@@ -1,6 +1,6 @@
 
-source("r_files/package_load.R")
 
+source("r_files/package_load.R")
 
 
 cons.police <- dbConnect(drv=RSQLite::SQLite(), dbname=db_dir)
@@ -14,14 +14,15 @@ burgs_hist$Date2 <- ymd_hms(burgs_hist$Date2)
 #burgs_hist$Count <- 1
 
 
-##Reading in the data
+#Files from Google Drive do not have the '.csv' suffix. 
+#The suffix is added to the name and the updated files are loaded
 police_24drive <- paste(drive_dir, "Police/24_hr_shift_report/download", sep = "")
 
 oldNames<-list.files(police_24drive, full.names = TRUE) 
 newNames<-paste(oldNames,".csv", sep="")
 for (i in 1:length(oldNames)) file.rename(oldNames[i],newNames[i])
 
-#Create a character vector of all EXCEL files
+#Create a character vector of all EXCEL files with the '.csv'
 filenames <- list.files(path = police_24drive, pattern=".csv", full.names=T)
 
 #Read the contents of all EXCEl worksheets into a list
@@ -207,6 +208,7 @@ st_write(vehicle_sf,
          driver = "ESRI Shapefile", 
          delete_layer = TRUE)
 
+
 #### Criminal Mischief of Automobiles
 
 ##Reading in the data
@@ -221,8 +223,6 @@ a_mischief_auto <- read.csv(max(a_filenames), header = TRUE, stringsAsFactors = 
 #Bind the rows of the data.frame lists created from the EXCEL sheets
 #a_mischief_auto  <- rbind.fill(a_df.lists)
 names(a_mischief_auto)[1] <- "IncidentNu"
-
-
 
 
 
