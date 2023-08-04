@@ -1,5 +1,15 @@
 ## README
 
+<details>
+  <summary><b>Table of Contents</b></summary>
+  <ol>
+    <li><a href="#project">Project</a></li>
+    <li><a href="#data-collection">Data Collection</a></li>
+    <li><a href="#data-processing">Data Processing</a></li>
+    <li><a href="#weekly-data-snapshot">Weekly Data Snapshot</a></li>
+  </ol>
+</details>
+
 ## Software
 
 -   Microsoft Power Automate
