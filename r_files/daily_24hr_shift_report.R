@@ -144,7 +144,7 @@ daily_robs <- daily_24hr %>%
     filter(Date >= today() - days(720))
   
 
-#daily_robs$Date<- format(strptime(daily_robs$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
+daily_robs$Date<- format(strptime(daily_robs$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
 daily_robs$Date <- ymd(daily_robs$Date)
 daily_robs <- daily_robs[!grepl("POLICE", daily_robs$Address),]
 #daily_robs$Date <- as.character(daily_robs$Date)
@@ -207,10 +207,83 @@ st_write(vehicle_sf,
          driver = "ESRI Shapefile", 
          delete_layer = TRUE)
 
+#### Criminal Mischief of Automobiles
+
+##Reading in the data
+mischief_auto <- paste(drive_dir, "Police/24_hr_shift_report/criminal_mischief_auto", sep = "")
+
+#Create a character vector of all EXCEL files
+a_filenames <- list.files(path = mischief_auto, pattern=".csv", full.names=T)
+
+#Read the contents of all EXCEl worksheets into a list
+#a_df.lists  <- lapply(a_filenames, function(x) read.csv(file=x, header=TRUE, stringsAsFactors = FALSE))
+a_mischief_auto <- read.csv(max(a_filenames), header = TRUE, stringsAsFactors = FALSE)
+#Bind the rows of the data.frame lists created from the EXCEL sheets
+#a_mischief_auto  <- rbind.fill(a_df.lists)
+names(a_mischief_auto)[1] <- "IncidentNu"
+
+
+
+
+
+misch_hist <- dbGetQuery(cons.police, "SELECT * FROM Weekly_Hot_Spot  
+                         WHERE [Incident Type] == 'Criminal Mischief-Auto'")
+
+#misch_hist <- misch_hist[, c(1, 6, 7, 8, 9, 3, 4, 29, 30)]
+#names(misch_hist)[9] <- "Lon"
+misch_hist <- misch_hist[, c(1:10)]
+#misch_hist$Date <- mdy_hms(misch_hist$Date)
+misch_hist$Date <- ymd(misch_hist$Date)
+misch_hist$Date2 <- ymd_hms(misch_hist$Date2)
+misch_hist$Count <- 1
+
+
+##Filtering data
+##! Keep only distinct burglary calls by incident number and with the first responding unit !##
+daily_mischief <- daily_24hr %>%
+  #filter(grepl("Criminal Mischief", `Incident Type`))%>%
+  group_by(IncidentNu, `Incident Type`, Address, Lat, Lon)%>%
+  filter(row_number()==1) %>%
+  mutate(Lat = as.numeric(Lat), 
+         Lon = as.numeric(Lon),
+         Date = mdy_hms(Date),
+         Date2 = Date)%>%
+  bind_rows(misch_hist)%>%
+  left_join(a_mischief_auto, by = "IncidentNu")%>%
+  filter(!is.na(Case.ORI) | `Incident Type` == "Criminal Mischief-Auto")%>%
+  #distinct()%>%
+  mutate(`Incident Type` = "Criminal Mischief-Auto")%>%
+  select(1:10)%>%
+  mutate(Count = 1)
+daily_mischief_hist <- daily_mischief
+#field must be a date for space time cube)%>%
+#filter(year(Date) >= 2022)%>%
+daily_mischief <- daily_mischief %>%
+  filter(Date >= today() - days(320))
+
+
+daily_mischief$Date<- format(strptime(daily_mischief$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
+daily_mischief$Date <- ymd(daily_mischief$Date)
+daily_mischief <- daily_mischief[!grepl("POLICE", daily_mischief$Address),]
+daily_mischief$`Incident Type` <- gsub(" - ", "-", daily_mischief$`Incident Type`)
+
+#daily_robs$Date <- ymd_hms(daily_robs$Date)
+
+## Export for datacube and emerging hot spot analysis ##
+mischief_sf <- st_as_sf(daily_mischief, coords = c("Lon", "Lat"),  crs = 4326)
+mischief_sf <- st_join(mischief_sf, city_bndy, join = st_within)%>%
+  filter(!is.na(CITY))
+
+st_write(mischief_sf, 
+         map_dir, 
+         layer = "vehicle_mischief_daily", 
+         driver = "ESRI Shapefile", 
+         delete_layer = TRUE)
+
 
 
 daily_burgs_hist <- daily_burgs_hist[!grepl("2023-00009449", daily_burgs_hist$IncidentNu),]
-weekly_data_update <- rbind(daily_burgs_hist, daily_vthefts_hist, daily_robs_hist, daily_theft_hist)
+weekly_data_update <- rbind(daily_burgs_hist, daily_vthefts_hist, daily_robs_hist, daily_theft_hist, daily_mischief_hist)
 weekly_data_update$Date <- as.character(weekly_data_update$Date)
 weekly_data_update$Date2 <- as.character(weekly_data_update$Date2)
 weekly_data_update$Date<- format(strptime(weekly_data_update$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
