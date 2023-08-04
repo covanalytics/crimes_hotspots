@@ -1,5 +1,6 @@
 ## README
 
+<<<<<<< HEAD
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary><b>Table of Contents</b></summary>
@@ -19,6 +20,19 @@
 
 
 # Technology
+=======
+<details>
+  <summary><b>Table of Contents</b></summary>
+  <ol>
+    <li><a href="#project">Project</a></li>
+    <li><a href="#data-collection">Data Collection</a></li>
+    <li><a href="#data-processing">Data Processing</a></li>
+    <li><a href="#weekly-data-snapshot">Weekly Data Snapshot</a></li>
+  </ol>
+</details>
+
+## Software
+>>>>>>> 72a3a34573a16794ec1ed20f24eac92150d74f06
 
 -   Microsoft Power Automate
 -   Google Drive
