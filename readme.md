@@ -1,26 +1,7 @@
 ## README
 
-<<<<<<< HEAD
+
 <!-- TABLE OF CONTENTS -->
-<details>
-  <summary><b>Table of Contents</b></summary>
-  <ol>
-    <li><a href="#project">Pision</a></li>
-    <li><a href="#data-collection">Data Collection</a></li>
-    <li><a href="#data-processing">Data Processing</a></li>
-    <li><a href="#weekly-data-snapshot">Weekly Data Snapshot</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-
-# Project
-
-
-# Technology
-=======
 <details>
   <summary><b>Table of Contents</b></summary>
   <ol>
@@ -31,8 +12,13 @@
   </ol>
 </details>
 
+
+# Project
+
+
+# Technology
+
 ## Software
->>>>>>> 72a3a34573a16794ec1ed20f24eac92150d74f06
 
 -   Microsoft Power Automate
 -   Google Drive
