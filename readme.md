@@ -24,7 +24,7 @@
 
 some text
 
-![](images/power_automate_overview.png)
+![](power_automate_overview.png)
 
 
 # Data Processing
