@@ -9,3 +9,7 @@
 -   RStudio (64x bit needed to connect to library of tools in ArcGIS
     Pro)
 -   ArcGIS Online
+
+### R Packages
+
+    --- tidyverse
