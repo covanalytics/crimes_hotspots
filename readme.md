@@ -1,0 +1,11 @@
+## README
+
+## Software
+
+-   Microsoft Power Automate
+-   Google Drive
+-   SQLite database engine
+-   ArcGIS Pro
+-   RStudio (64x bit needed to connect to library of tools in ArcGIS
+    Pro)
+-   ArcGIS Online
