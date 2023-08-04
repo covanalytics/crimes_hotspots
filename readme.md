@@ -10,6 +10,22 @@
     Pro)
 -   ArcGIS Online
 
-### R Packages
+## R Packages
 
-    --- tidyverse
+-   tidyverse
+-   ggmap
+-   sf
+-   lubridate
+-   ggpubr
+-   arcgisbinding
+-   RPyGeo (ArcGIS processing via Python)
+
+# Data Collection
+
+# Data Processing
+
+# Weekly Data Snapshot
+
+# Weekly Hotspot Models
+
+# Model Presentation
