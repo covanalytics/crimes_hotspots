@@ -8,20 +8,27 @@ source("r_files/package_load.R")
 #///////////////////////////////////
 city <- st_read(geo_dir, "City_Covington")
 city_sf <- st_transform(city, crs = 4326)
-police <- st_read(paste(map_dir, "police_sectors.shp", sep=""))
+police <- st_read(paste(map_dir, "police_sectors.shp", sep="/"))
 police_sf <- st_transform(police, crs = 4326)
 neigh <- st_read(geo_dir, "Neighborhoods_Covington")
 neigh_sf <- st_transform(neigh, crs = 4326)
 
 
-crimes1<- rbind(burgs_sf, thefts_sf, robs_sf, vehicle_sf)%>%
+crimes1<- rbind(burgs_sf, thefts_sf, robs_sf, vehicle_sf, mischief_sf)%>%
   st_transform(crs = 4326)%>%
   select(1:10)%>%
   st_join(neigh_sf, join = st_within)%>%
-  filter (Date >= today() - days(31))%>%
+  #filter (Date >= today() - days(31))%>%
   #mutate(`Incident Type` = as.factor(`Incident Type`))%>%
-  select(1:10,14) 
-crimes <- st_join(crimes1, police_sf, join = st_within)
+  select(1:10,14)
+
+st_write(crimes1, 
+         map_dir, 
+         layer = "crimes", 
+         driver = "ESRI Shapefile", 
+         delete_layer = TRUE)
+crimes <- st_join(crimes1, police_sf, join = st_within)%>%
+    filter (Date >= today() - days(31))
 #crimes$`Incident Type` <- as.factor(crimes$`Incident Type`)
 crimes$Hour <- format(strptime(crimes$Date2, format='%Y-%m-%d %H:%M:%S'), '%I %p')
 crimes$Hour_AM_PM <- format(strptime(crimes$Date2, format='%Y-%m-%d %H:%M:%S'), '%p')
@@ -39,13 +46,15 @@ crimes_df <- crimes_df %>%
 
 crimes_df$`Incident Type`[crimes_df$`Incident Type` == 'Theft-From a Motor Vehicle'] <- "Theft From MV"
 crimes_df$`Incident Type`[crimes_df$`Incident Type` == 'Theft-Motor Vehicle'] <- "Theft of MV"
-
+crimes_df$`Incident Type`[crimes_df$`Incident Type` == 'Criminal Mischief-Auto'] <- "CM Auto"
 
 ##//////////////////////////////////////##
 ##2. Snapshot--Heat map crimes by Type ----
 ##//////////////////////////////////////##
 crimes_heat <- crimes_df %>%
   filter(!grepl("South Covington", NbhdLabel))
+
+
 
 #max_lon <- max(crimes_heat$lon)+ 0.05
 #min_lon <- min(crimes_heat$lon)- 0.05
@@ -101,7 +110,7 @@ crimes_ampm <- crimes_df %>%
   
   theme_bw()+
   scale_fill_manual(values=c('#c3b632','#3d134f'))+
-  ylim(c(0,80))+
+  ylim(c(0,50))+
   labs(caption = paste("","", "Weekly snapshot", 
                        today(), 
                        "City of Covington", sep = "\n"))+
@@ -151,7 +160,7 @@ crimes_ampm_bchrt <- crimes_df %>%
   geom_bar(stat = 'identity', position = "dodge")+
   #facet_wrap(~TYPE)+
   scale_fill_manual(values=c('#c3b632','#3d134f'))+
-  ylim(c(0,30))+
+  ylim(c(0,20))+
   
   #coord_flip()+
   geom_text(aes(label=Count),  position= position_dodge(0.9), vjust = -1.0, size = 2.7)+
@@ -172,8 +181,21 @@ crime_snap <- ggarrange(crime_hotspot,
 ggsave(paste("U:/Mapping/Police/crime_snapshot_", 
              today(), 
              ".png", 
-             sep = ""), crime_snap, width = 672, height = 672, units = "px", dpi = 120)
+             sep = ""), crime_snap, width = 8, height = 7, units = "in", dpi = 120)
 
+
+
+crimes <- st_read("U:/Mapping/Police/Crimes.shp")
+crimes_sf <- st_transform(crimes, crs = 4326)%>%
+  filter(!grepl("South Covington", NbhdLbl))
+
+saveRDS(crimes_sf, "C:/Users/tsink/Documents/covdata_graphics/data/police/crimes.rds")
+
+density <- st_read("C:/Users/tsink/Documents/ArcGIS/Projects/Weekly_Crime_Hotspot/Crimes_Density_Polygon.shp")
+density_sf <- st_transform(density, crs = 4326) %>%
+  filter(ContourMin > 1)
+
+saveRDS(density_sf, "C:/Users/tsink/Documents/covdata_graphics/data/police/crimes_density.rds")
 
 
 
