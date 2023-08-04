@@ -9,6 +9,8 @@
     <li><a href="#data-collection">Data Collection</a></li>
     <li><a href="#data-processing">Data Processing</a></li>
     <li><a href="#weekly-data-snapshot">Weekly Data Snapshot</a></li>
+    <li><a href="#weekly-hotspot-models">Weekly Hotspot Models</a></li>
+    <li><a href="#model-presentation">Model Presentation</a></li>
   </ol>
 </details>
 
@@ -17,8 +19,6 @@
 
 
 # Technology
-
-## Software
 
 -   Microsoft Power Automate
 -   Google Drive
@@ -50,6 +50,12 @@ A Power Automate workflow was created to store the attached file in a Google Dri
 
 
 # Data Processing
+
+The daily 24 hour shift report files are processed in the R script
+*daily_24hr_shift_report.R* The script reads, cleans, filters, formats,
+and adds new features and stores new data that are needed to generate
+hot spot models and weekly snapshots of crimes.
+
 
 # Weekly Data Snapshot
 
