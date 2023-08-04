@@ -26,8 +26,7 @@ Every morning at 8:00 AM a shift report CSV containing the previous 24
 hour police dispatches is received via automated email from the Kenton
 County Kentucky Dispatch Center.
 
-A Power Automate workflow was created to take the attached file and
-store it in a Google Drive folder.
+A Power Automate workflow was created to store the attached file in a Google Drive folder.
 
 ![](images/power_automate_overview.PNG)
 
