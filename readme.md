@@ -59,6 +59,10 @@ hot spot models and weekly snapshots of crimes.
 
 # Weekly Data Snapshot
 
+![](images/crime_snapshot_2023-07-31.png)
+
+
+
 # Weekly Hotspot Models
 
 # Model Presentation
