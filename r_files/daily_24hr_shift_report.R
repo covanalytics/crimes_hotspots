@@ -7,6 +7,12 @@ source("r_files/package_load.R")
 #///////////////////////////////////////////////////////////////////////////////////
 cons.police <- dbConnect(drv=RSQLite::SQLite(), dbname=db_dir)
 
+## Load burglary history here to use field names for updates
+burgs_hist <- dbGetQuery(cons.police, "SELECT * FROM Weekly_Hot_Spot WHERE [Incident Type] == 'Burglary'")
+burgs_hist <- burgs_hist[, c(1:10)]
+burgs_hist$Date <- ymd(burgs_hist$Date)
+
+burgs_hist$Date2 <- ymd_hms(burgs_hist$Date2)
 
 #////////////////////////////////////////////////////////////////////
 #### Add .csv to filenames --------------
@@ -35,11 +41,7 @@ names(daily_24hr) <- names(burgs_hist)
 ### Burglaries ----------------
 #/////////////////////////////////////////////////////////////////////////////
 
-burgs_hist <- dbGetQuery(cons.police, "SELECT * FROM Weekly_Hot_Spot WHERE [Incident Type] == 'Burglary'")
-burgs_hist <- burgs_hist[, c(1:10)]
-burgs_hist$Date <- ymd(burgs_hist$Date)
 
-burgs_hist$Date2 <- ymd_hms(burgs_hist$Date2)
 
 
 ##! Keep only distinct burglary calls by incident number and with the first responding unit !##
