@@ -247,8 +247,8 @@ daily_theft_hist <- daily_theft
 
 
 ## Export for datacube and emerging hot spot analysis ##
-vehicle_sf <- st_as_sf(daily_theft, coords = c("Lon", "Lat"),  crs = 4326)
-vehicle_sf <- st_join(vehicle_sf, city_bndy, join = st_within)%>%
+vehicle_sf <- st_as_sf(daily_theft, coords = c("Lon", "Lat"),  crs = 4326)%>%
+  st_join(city_bndy, join = st_within)%>%
   filter(!is.na(CITY))
 
 st_write(vehicle_sf, 
