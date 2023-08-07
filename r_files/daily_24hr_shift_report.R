@@ -41,10 +41,7 @@ names(daily_24hr) <- names(burgs_hist)
 ### Burglaries ----------------
 #/////////////////////////////////////////////////////////////////////////////
 
-
-
-
-##! Keep only distinct burglary calls by incident number and with the first responding unit !##
+##! Keep only incident number with the first responding unit !##
 daily_burgs <- daily_24hr %>%
   #bind_rows(jan_burg)%>%
   filter(grepl("Burglary", `Incident Type`))%>%
@@ -59,7 +56,7 @@ daily_burgs <- daily_24hr %>%
   mutate(Count = 1)
   daily_burgs_hist <- daily_burgs
   daily_burgs <- daily_burgs %>%
-    filter(Date >= today() - days(110))
+    filter(Date >= today() - days(110))##keeping history for datacube
   
 daily_burgs$Date<- format(strptime(daily_burgs$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
 daily_burgs$Date <- ymd(daily_burgs$Date)
@@ -93,8 +90,7 @@ auto_theft_hist <- auto_theft_hist[, c(1:10)]
 auto_theft_hist$Date <- ymd(auto_theft_hist$Date)
 auto_theft_hist$Date2 <- ymd_hms(auto_theft_hist$Date2)
 
-##Filtering data
-##! Keep only motor vehicle thefts calls by incident number and with the first responding unit !##
+##! Keep only incident number with the first responding unit !##
 daily_vthefts <- daily_24hr %>%
   filter(grepl("Theft-Motor Vehicle", `Incident Type`))%>%
   group_by(IncidentNu, `Incident Type`, Address, Lat, Lon)%>%
@@ -108,14 +104,13 @@ daily_vthefts <- daily_24hr %>%
 daily_vthefts_hist <- daily_vthefts
   #field must be a date for space time cube)%>%
   daily_vthefts <- daily_vthefts %>%
-    filter(Date >= today() - days(170))
+    filter(Date >= today() - days(170))##keeping history for datacube
   
 
 daily_vthefts$Date<- format(strptime(daily_vthefts$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
 daily_vthefts$Date <- ymd(daily_vthefts$Date)
 daily_vthefts <- daily_vthefts[!grepl("POLICE", daily_vthefts$Address),]
 daily_vthefts$`Incident Type` <- gsub(" - ", "-", daily_vthefts$`Incident Type`)
-#daily_vthefts$Date <- as.character(daily_vthefts$Date)
 
 ## Export for datacube and emerging hot spot analysis ##
 thefts_sf <- st_as_sf(daily_vthefts, coords = c("Lon", "Lat"),  crs = 4326)
@@ -139,7 +134,7 @@ robbery_hist$Date <- ymd(robbery_hist$Date)
 robbery_hist$Date2 <- ymd_hms(robbery_hist$Date2)
 
 ##Filtering data
-##! Keep only distinct robbery calls by incident number and with the first responding unit !##
+##! Keep only incident number with the first responding unit !##
 daily_robs <- daily_24hr %>%
   filter(grepl("Robbery", `Incident Type`))%>%
   group_by(IncidentNu, `Incident Type`, Address, Lat, Lon)%>%
@@ -153,14 +148,13 @@ daily_robs <- daily_24hr %>%
   daily_robs_hist <- daily_robs
   #field must be a date for space time cube)%>%
   daily_robs <- daily_robs %>%
-    filter(Date >= today() - days(720))
+    filter(Date >= today() - days(720))##keeping history for datacube
   
 
 daily_robs$Date<- format(strptime(daily_robs$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
 daily_robs$Date <- ymd(daily_robs$Date)
 daily_robs <- daily_robs[!grepl("POLICE", daily_robs$Address),]
-#daily_robs$Date <- as.character(daily_robs$Date)
-#daily_robs$Date <- ymd_hms(daily_robs$Date)
+
 daily_robs$Lon[grepl("11/GREENUP", daily_robs$Address)] <- -84.508415 
 daily_robs$Lat[grepl("11/GREENUP", daily_robs$Address)] <- 39.089944
 
@@ -178,6 +172,7 @@ st_write(robs_sf,
 #//////////////////////////////////////////////////////////////////////////////////////////
 ### Theft from Motor Vehicle ----------------
 #/////////////////////////////////////////////////////////////////////////////////////////
+
 theft_hist <- dbGetQuery(cons.police, "SELECT * FROM Weekly_Hot_Spot 
                            WHERE [Incident Type] == 'Theft-From a Motor Vehicle'")
 theft_hist <- theft_hist[, c(1:10)]
@@ -185,7 +180,7 @@ theft_hist$Date <- ymd(theft_hist$Date)
 theft_hist$Date2 <- ymd_hms(theft_hist$Date2)
 
 ##Filtering data
-##! Keep only distinct theft from motor vehicle calls by incident number and with the first responding unit !##
+##! Keep only incident number with the first responding unit !##
 daily_theft <- daily_24hr %>%
   filter(grepl("Theft-From a Motor Vehicle", `Incident Type`))%>%
   group_by(IncidentNu, `Incident Type`, Address, Lat, Lon)%>%
@@ -199,7 +194,7 @@ daily_theft <- daily_24hr %>%
 daily_theft_hist <- daily_theft
   #field must be a date for space time cube)%>%
   daily_theft <- daily_theft %>%
-    filter(Date >= today() - days(220))
+    filter(Date >= today() - days(220))##keeping history for datacube
   
 
 daily_theft$Date<- format(strptime(daily_theft$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
@@ -251,7 +246,7 @@ misch_hist$Date2 <- ymd_hms(misch_hist$Date2)
 misch_hist$Count <- 1
 
 
-##! Keep only distinct criminal mischief of auto calls by incident number and with the first responding unit !##
+##! Keep only incident number with the first responding unit !##
 daily_mischief <- daily_24hr %>%
   #filter(grepl("Criminal Mischief", `Incident Type`))%>%
   group_by(IncidentNu, `Incident Type`, Address, Lat, Lon)%>%
@@ -270,15 +265,13 @@ daily_mischief <- daily_24hr %>%
 daily_mischief_hist <- daily_mischief
 #field must be a date for space time cube)%>%
 daily_mischief <- daily_mischief %>%
-  filter(Date >= today() - days(320))
+  filter(Date >= today() - days(320))##keeping history for datacube
 
 
 daily_mischief$Date<- format(strptime(daily_mischief$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
 daily_mischief$Date <- ymd(daily_mischief$Date)
 daily_mischief <- daily_mischief[!grepl("POLICE", daily_mischief$Address),]
 daily_mischief$`Incident Type` <- gsub(" - ", "-", daily_mischief$`Incident Type`)
-
-#daily_robs$Date <- ymd_hms(daily_robs$Date)
 
 ## Export for datacube and emerging hot spot analysis ##
 mischief_sf <- st_as_sf(daily_mischief, coords = c("Lon", "Lat"),  crs = 4326) %>%
@@ -309,14 +302,14 @@ weekly_data_update <- weekly_data_update %>%
          Date = format(strptime(Date, format = '%Y-%m-%d %H:%M:%S'), '%Y-%m-%d'))
 
 
-weekly_data_update$Date <- as.character(weekly_data_update$Date)
-weekly_data_update$Date2 <- as.character(weekly_data_update$Date2)
-weekly_data_update$Date<- format(strptime(weekly_data_update$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
+#weekly_data_update$Date <- as.character(weekly_data_update$Date)
+#weekly_data_update$Date2 <- as.character(weekly_data_update$Date2)
+#weekly_data_update$Date<- format(strptime(weekly_data_update$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
 
 #///////////////////////////////////////////////////////////////////////////////////////////
 ### Overwrite historical database with new data----
 #//////////////////////////////////////////////////////////////////////////////////////////
-library("RSQLite")
+
 cons.police <- dbConnect(drv=RSQLite::SQLite(), dbname=db_dir)
 dbWriteTable(cons.police, "Weekly_Hot_Spot", weekly_data_update, overwrite = TRUE)
 crimes <- dbGetQuery(cons.police, 'select * from Weekly_Hot_Spot')
