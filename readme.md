@@ -76,6 +76,12 @@ The weekly snapshot is created in the R script **weekly_snapshot.R**
 
 We connect to the library of tools in ArcGIS Pro inside of Rstudio
 
+``` r
+arcpy <- rpygeo_build_env(path = "C:/Program Files/ArcGIS/Pro/bin/Python/envs/arcgispro-py3/python.exe", 
+                          overwrite = TRUE,
+                          extensions = "Spatial")
+```
+
 ### Emerging Hotspots
 
 Create space-time cube
