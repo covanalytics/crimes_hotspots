@@ -48,7 +48,6 @@ A Power Automate workflow was created to store the attached file in a Google Dri
 
 ![](images/power_automate_overview.PNG)
 
-
 # Data Processing
 
 The daily 24 hour shift report files are processed in the R script
@@ -67,9 +66,21 @@ during the day or night.
 
 The weekly snapshot is created in the R script **weekly_snapshot.R**
 
-![](images/crime_snapshot_2023-08-08.png)
+![](images/crime_snapshot_2023-07-31.png)
 
 ### Optimal and Emerging Hotspots
+
+# Creating Hotspots
+
+## ArcGIS Pro
+
+We connect to the library of tools in ArcGIS Pro inside of Rstudio
+
+``` r
+arcpy <- rpygeo_build_env(path = "C:/Program Files/ArcGIS/Pro/bin/Python/envs/arcgispro-py3/python.exe", 
+                          overwrite = TRUE,
+                          extensions = "Spatial")
+```
 
 ``` python
 theft_cube = arcpy.env.workspace + "/vtheft_cube_weekly.nc"
@@ -85,4 +96,5 @@ arcpy.stpm.CreateSpaceTimeCube(theft_prj,
                                "HEXAGON_GRID", None, None)
 ```
 
-###
+### Creating Emerging Hotspots
+
