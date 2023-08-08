@@ -111,7 +111,7 @@ with arcpy.EnvManager(scratchWorkspace = arcpy.env.workspace + "/Weekly_Crime_Ho
                       "COUNT_SUM_ZEROS",                              #The analysis variable to use
                        theft_spot_path,                               #The output path
                        "300 Feet",                                    #The size of the analysis area
-                       1,                                             #Number of time-step intervals to include
+                       1,                                             #Number of time-step intervals
                        None, 
                        "FIXED_DISTANCE",                              #Define spatial relationships
                        None, 
