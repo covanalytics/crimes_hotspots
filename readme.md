@@ -107,12 +107,24 @@ Analysis
 theft_spot_path = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb/VTheft_Analysis_Emerging_HotSpot"
 with arcpy.EnvManager(scratchWorkspace = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb", 
                       workspace = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb"):
-                      arcpy.stpm.EmergingHotSpotAnalysis(theft_cube, 
-                      "COUNT_SUM_ZEROS", 
-                       theft_spot_path, 
-                       "300 Feet", 
-                       1, None, "FIXED_DISTANCE", None, "ENTIRE_CUBE")
-arcpy.management.CalculateField(theft_spot_path, "TYPE", '"Theft-Motor Vehicle"', "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")        
+                      arcpy.stpm.EmergingHotSpotAnalysis(theft_cube,  #Space-time cube to use
+                      "COUNT_SUM_ZEROS",                              #The analysis variable to use
+                       theft_spot_path,                               #The output path
+                       "300 Feet",                                    #The size of the analysis area
+                       1,                                             #Number of time-step intervals to include
+                       None, 
+                       "FIXED_DISTANCE",                              #Define spatial relationships
+                       None, 
+                       "ENTIRE_CUBE")                                 #Define global window
+                       
+#Calculate field for emerging hotspot analysis output                       
+arcpy.management.CalculateField(theft_spot_path,                      #Emerging hotspot analysis output
+                                "TYPE",                               #The field that will be updated
+                                '"Theft-Motor Vehicle"',              #The update
+                                "PYTHON3",                            #The type of expression to use
+                                '',
+                                "TEXT",                               #Data value type
+                                "NO_ENFORCE_DOMAINS")        
 ```
 
 ### Optimal Hotspots
