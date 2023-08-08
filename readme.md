@@ -61,12 +61,12 @@ hot spot models and weekly snapshots of crimes.
 
 Every week the Police Department receives a snapshot of crimes reported
 over the last 30 days. The snapshot provides insight into where criminal
-activities have been most concentrated and if they occurred more during
+activities have been most concentrated and if they have occurred more during
 the day or night.
 
 The weekly snapshot is created in the R script **weekly_snapshot.R**
 
-![](images/crime_snapshot_2023-07-31.png)
+![](images/crime_snapshot_2023-08-08.png)
 
 
 
