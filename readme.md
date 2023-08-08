@@ -67,7 +67,7 @@ during the day or night.
 
 The weekly snapshot is created in the R script **weekly_snapshot.R**
 
-![](images/crime_snapshot_2023-07-31.png)
+![](images/crime_snapshot_2023-08-08.png)
 
 ### Optimal and Emerging Hotspots
 
