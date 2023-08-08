@@ -52,24 +52,36 @@ A Power Automate workflow was created to store the attached file in a Google Dri
 # Data Processing
 
 The daily 24 hour shift report files are processed in the R script
-**daily_24hr_shift_report.R.** The script reads, cleans, filters, formats,
-and adds new features and stores new spatial data files that are needed to generate
-hot spot models and weekly snapshots of crimes.
+**daily_24hr_shift_report.R** The script reads, cleans, filters,
+formats, and adds new features and stores new spatial data files that
+are needed to generate hot spot models and weekly snapshots of crimes.
 
+# Products Distributed
 
-# Weekly Data Snapshot
+### Weekly Data Snapshot
 
 Every week the Police Department receives a snapshot of crimes reported
 over the last 30 days. The snapshot provides insight into where criminal
-activities have been most concentrated and if they have occurred more during
-the day or night.
+activities have been most concentrated and if they have occurred more
+during the day or night.
 
 The weekly snapshot is created in the R script **weekly_snapshot.R**
 
-![](images/crime_snapshot_2023-08-08.png)
+![](images/crime_snapshot_2023-07-31.png)
 
+### Optimal and Emerging Hotspots
 
+``` python
+theft_cube = arcpy.env.workspace + "/vtheft_cube_weekly.nc"
+arcpy.stpm.CreateSpaceTimeCube(theft_prj, 
+                               theft_cube,
+                               "Date",
+                               None, 
+                               "1 Weeks", 
+                               "END_TIME", 
+                               None, 
+                               "300 Feet", 
+                               "Count SUM ZEROS", 
+                               "HEXAGON_GRID", None, None)
+```
 
-# Weekly Hotspot Models
-
-# Model Presentation
