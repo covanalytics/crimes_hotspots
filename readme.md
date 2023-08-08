@@ -76,25 +76,38 @@ The weekly snapshot is created in the R script **weekly_snapshot.R**
 
 We connect to the library of tools in ArcGIS Pro inside of Rstudio
 
-``` r
-arcpy <- rpygeo_build_env(path = "C:/Program Files/ArcGIS/Pro/bin/Python/envs/arcgispro-py3/python.exe", 
-                          overwrite = TRUE,
-                          extensions = "Spatial")
-```
+### Emerging Hotspots
+
+Create space-time cube
 
 ``` python
 theft_cube = arcpy.env.workspace + "/vtheft_cube_weekly.nc"
-arcpy.stpm.CreateSpaceTimeCube(theft_prj, 
-                               theft_cube,
-                               "Date",
+arcpy.stpm.CreateSpaceTimeCube(theft_prj,         #Projected shapefile
+                               theft_cube,        #Data cube
+                               "Date",            #Time field
+                               None,              #Template cube
+                               "1 Weeks",         #Time step interval
+                               "END_TIME",        #Time step alignment; how aggregation occurs
                                None, 
-                               "1 Weeks", 
-                               "END_TIME", 
-                               None, 
-                               "300 Feet", 
-                               "Count SUM ZEROS", 
-                               "HEXAGON_GRID", None, None)
+                               "300 Feet",        #Size of bins to aggregate points
+                               "Count SUM ZEROS", #Summary fields
+                               "HEXAGON_GRID",    #The shape of the polygon mesh to aggregate points
+                               None, None)
 ```
 
-### Creating Emerging Hotspots
+Analysis
+
+``` python
+theft_spot_path = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb/VTheft_Analysis_Emerging_HotSpot"
+with arcpy.EnvManager(scratchWorkspace = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb", 
+                      workspace = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb"):
+                      arcpy.stpm.EmergingHotSpotAnalysis(theft_cube, 
+                      "COUNT_SUM_ZEROS", 
+                       theft_spot_path, 
+                       "300 Feet", 
+                       1, None, "FIXED_DISTANCE", None, "ENTIRE_CUBE")
+arcpy.management.CalculateField(theft_spot_path, "TYPE", '"Theft-Motor Vehicle"', "PYTHON3", '', "TEXT", "NO_ENFORCE_DOMAINS")        
+```
+
+### Optimal Hotspots
 
