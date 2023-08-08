@@ -59,18 +59,17 @@ daily_burgs <- daily_24hr %>%
 daily_burgs_hist <- daily_burgs
   ##keeping history for datacube
 daily_burgs <- daily_burgs %>%
-    filter(Date >= today() - days(110))%>%
-    mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
-           Date = ymd(Date))%>%
-    filter(!grepl("POLICE", Address))%>%
-    filter(!grepl("2023-00009449", IncidentNu))
+    filter(Date >= today() - days(110))
+   # mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
+   #        Date = ymd(Date))%>%
+   # filter(!grepl("POLICE", Address))%>%
+   # filter(!grepl("2023-00009449", IncidentNu))
   
   
-#daily_burgs$Date<- format(strptime(daily_burgs$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
-#daily_burgs$Date <- ymd(daily_burgs$Date)
-#daily_burgs <- daily_burgs[!grepl("POLICE", daily_burgs$Address),]
-
-#daily_burgs <- daily_burgs[!grepl("2023-00009449", daily_burgs$IncidentNu),]
+daily_burgs$Date<- format(strptime(daily_burgs$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
+daily_burgs$Date <- ymd(daily_burgs$Date)
+daily_burgs <- daily_burgs[!grepl("POLICE", daily_burgs$Address),]
+daily_burgs <- daily_burgs[!grepl("2023-00009449", daily_burgs$IncidentNu),]
 
 # get city boundary from geodatabase
 city_bndy <- st_read(geo_dir, "City_Covington") %>%
@@ -121,16 +120,16 @@ daily_vthefts <- daily_24hr %>%
 daily_vthefts_hist <- daily_vthefts
 ##keeping history for datacube
   daily_vthefts <- daily_vthefts %>%
-    filter(Date >= today() - days(170))%>%
-    mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
-           Date = ymd(Date),
-           `Incident Type` = gsub(" - ", "-", `Incident Type`))%>%
-    filter(!grepl("POLICE", Address))
+    filter(Date >= today() - days(170))
+    #mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
+    #        `Incident Type` = gsub(" - ", "-", `Incident Type`))%>%
+    #mutate(Date = ymd(Date))%>%
+    #filter(!grepl("POLICE", Address))
 
-#daily_vthefts$Date<- format(strptime(daily_vthefts$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
-#daily_vthefts$Date <- ymd(daily_vthefts$Date)
-#daily_vthefts <- daily_vthefts[!grepl("POLICE", daily_vthefts$Address),]
-#daily_vthefts$`Incident Type` <- gsub(" - ", "-", daily_vthefts$`Incident Type`)
+daily_vthefts$Date<- format(strptime(daily_vthefts$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
+daily_vthefts$Date <- ymd(daily_vthefts$Date)
+daily_vthefts <- daily_vthefts[!grepl("POLICE", daily_vthefts$Address),]
+daily_vthefts$`Incident Type` <- gsub(" - ", "-", daily_vthefts$`Incident Type`)
 
 ## Export for datacube and emerging hot spot analysis ##
 thefts_sf <- st_as_sf(daily_vthefts, coords = c("Lon", "Lat"),  crs = 4326) %>%
@@ -176,15 +175,15 @@ daily_robs <- daily_24hr %>%
 daily_robs_hist <- daily_robs
 ##keeping history for datacube
 daily_robs <- daily_robs %>%
-    filter(Date >= today() - days(720))%>%
-    mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
-           Date = ymd(Date))%>%
-    filter(!grepl("POLICE", Address))
+    filter(Date >= today() - days(720))
+    #mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
+    #       Date = ymd(Date))%>%
+    #filter(!grepl("POLICE", Address))
   
 
-#daily_robs$Date<- format(strptime(daily_robs$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
-#daily_robs$Date <- ymd(daily_robs$Date)
-#daily_robs <- daily_robs[!grepl("POLICE", daily_robs$Address),]
+daily_robs$Date<- format(strptime(daily_robs$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
+daily_robs$Date <- ymd(daily_robs$Date)
+daily_robs <- daily_robs[!grepl("POLICE", daily_robs$Address),]
 
 daily_robs$Lon[grepl("11/GREENUP", daily_robs$Address)] <- -84.508415 
 daily_robs$Lat[grepl("11/GREENUP", daily_robs$Address)] <- 39.089944
@@ -235,15 +234,15 @@ daily_theft_hist <- daily_theft
 
   daily_theft <- daily_theft %>%
     filter(Date >= today() - days(220))
-    mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
-         Date = ymd(Date),
-         `Incident Type` = gsub(" - ", "-", `Incident Type`))%>%
-    filter(!grepl("POLICE", Address))
+    #mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
+    #     Date = ymd(Date),
+    #     `Incident Type` = gsub(" - ", "-", `Incident Type`))%>%
+    #filter(!grepl("POLICE", Address))
 
-#daily_theft$Date<- format(strptime(daily_theft$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
-#daily_theft$Date <- ymd(daily_theft$Date)
-#daily_theft <- daily_theft[!grepl("POLICE", daily_theft$Address),]
-#daily_theft$`Incident Type` <- gsub(" - ", "-", daily_theft$`Incident Type`)
+daily_theft$Date<- format(strptime(daily_theft$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
+daily_theft$Date <- ymd(daily_theft$Date)
+daily_theft <- daily_theft[!grepl("POLICE", daily_theft$Address),]
+daily_theft$`Incident Type` <- gsub(" - ", "-", daily_theft$`Incident Type`)
 
 
 ## Export for datacube and emerging hot spot analysis ##
@@ -316,15 +315,15 @@ daily_mischief_hist <- daily_mischief
 ##keeping history for datacube
 daily_mischief <- daily_mischief %>%
   filter(Date >= today() - days(320))
-  mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
-         Date = ymd(Date),
-         `Incident Type` = gsub(" - ", "-", `Incident Type`))%>%
-  filter(!grepl("POLICE", Address))
+  #mutate(Date = format(strptime(Date, format='%Y-%m-%d %H:%M:%S'),'%Y-%m-%d'),
+  #       Date = ymd(Date),
+  #       `Incident Type` = gsub(" - ", "-", `Incident Type`))%>%
+  #filter(!grepl("POLICE", Address))
 
-#daily_mischief$Date<- format(strptime(daily_mischief$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
-#daily_mischief$Date <- ymd(daily_mischief$Date)
-#daily_mischief <- daily_mischief[!grepl("POLICE", daily_mischief$Address),]
-#daily_mischief$`Incident Type` <- gsub(" - ", "-", daily_mischief$`Incident Type`)
+daily_mischief$Date<- format(strptime(daily_mischief$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
+daily_mischief$Date <- ymd(daily_mischief$Date)
+daily_mischief <- daily_mischief[!grepl("POLICE", daily_mischief$Address),]
+daily_mischief$`Incident Type` <- gsub(" - ", "-", daily_mischief$`Incident Type`)
 
 ## Export for datacube and emerging hot spot analysis ##
 mischief_sf <- st_as_sf(daily_mischief, coords = c("Lon", "Lat"),  crs = 4326) %>%
@@ -349,15 +348,15 @@ weekly_data_update <- rbind(daily_burgs_hist,
                             daily_theft_hist, 
                             daily_mischief_hist)
 
-weekly_data_update <- weekly_data_update %>%
-  mutate(Date = as.character(Date),
-         Date2 = as.character(Date2),
-         Date = format(strptime(Date, format = '%Y-%m-%d %H:%M:%S'), '%Y-%m-%d'))
+#weekly_data_update <- weekly_data_update %>%
+#  mutate(Date = as.character(Date),
+#         Date2 = as.character(Date2))
+ #       Date = format(strptime(Date, format = '%Y-%m-%d %H:%M:%S'), '%Y-%m-%d'))
 
 
-#weekly_data_update$Date <- as.character(weekly_data_update$Date)
-#weekly_data_update$Date2 <- as.character(weekly_data_update$Date2)
-#weekly_data_update$Date<- format(strptime(weekly_data_update$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
+weekly_data_update$Date <- as.character(weekly_data_update$Date)
+weekly_data_update$Date2 <- as.character(weekly_data_update$Date2)
+weekly_data_update$Date<- format(strptime(weekly_data_update$Date, format='%Y-%m-%d %H:%M:%S'), '%Y-%m-%d')
 
 #///////////////////////////////////////////////////////////////////////////////////////////
 ### Overwrite historical database with new data----
