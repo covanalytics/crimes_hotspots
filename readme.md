@@ -144,12 +144,16 @@ arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot 
 Merge the emerging hot spot analysis layers
 
 ``` python
+#Layers to merge
+
 Burglary_Emerging_Final = arcpy.env.workspace + "/Burglary_Emerging_Final.shp"
 VTheft_Emerging_Final = arcpy.env.workspace + "/VTheft_Emerging_Final.shp"
 Robbery_Emerging_Final = arcpy.env.workspace + "/Robbery_Emerging_Final.shp"
 Theft_From_Vehicle_Emerging_Final = arcpy.env.workspace + "/Theft_From_Vehicle_Emerging_Final.shp"
 Vehicle_Mischief_Emerging_Final = arcpy.env.workspace + "/Vehicle_Mischief_Emerging_Final.shp"
 
+
+#List of list layers
 
 emerging_list = [Burglary_Emerging_Final,
                  VTheft_Emerging_Final, 
@@ -158,6 +162,7 @@ emerging_list = [Burglary_Emerging_Final,
                  Vehicle_Mischief_Emerging_Final]
 
 
+#Mege layers and save
 arcpy.management.Merge(emerging_list,
                       arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp",  
                       'PATTERN "PATTERN" true true false 254 Text 0 0,First,#,
