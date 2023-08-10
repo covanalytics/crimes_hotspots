@@ -151,8 +151,11 @@ Theft_From_Vehicle_Emerging_Final = arcpy.env.workspace + "/Theft_From_Vehicle_E
 Vehicle_Mischief_Emerging_Final = arcpy.env.workspace + "/Vehicle_Mischief_Emerging_Final.shp"
 
 
-emerging_list = [Burglary_Emerging_Final, VTheft_Emerging_Final, Robbery_Emerging_Final, Theft_From_Vehicle_Emerging_Final, Vehicle_Mischief_Emerging_Final]
-
+emerging_list = [Burglary_Emerging_Final,
+                 VTheft_Emerging_Final, 
+                 Robbery_Emerging_Final, 
+                 Theft_From_Vehicle_Emerging_Final, 
+                 Vehicle_Mischief_Emerging_Final]
 
 
 arcpy.management.Merge(emerging_list,
