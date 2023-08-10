@@ -136,7 +136,7 @@ arcpy.management.CalculateField(theft_spot_path,                      #Emerging 
 Create a copy of each emerging hot spot output layer
 
 ``` python
-arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot spot out to copy                 
+arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot spot out to copy         
           arcpy.env.workspace + "/VTheft_Emerging_Final.shp", #Where the output will be copied
           '', None, None, None)
 ```
