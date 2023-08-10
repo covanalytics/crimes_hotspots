@@ -122,7 +122,7 @@ with arcpy.EnvManager(scratchWorkspace = arcpy.env.workspace + "/Weekly_Crime_Ho
 
 Calculate a field to label the results of the emerging hot spot analysis
 
-``` pytnon
+``` python
 arcpy.management.CalculateField(theft_spot_path,                      #Emerging hotspot analysis output
                                 "TYPE",                               #The field that will be updated
                                 '"Theft-Motor Vehicle"',              #The update
