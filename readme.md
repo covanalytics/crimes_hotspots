@@ -72,7 +72,8 @@ The weekly snapshot is created in the R script **weekly_snapshot.R**
 
 In addition to the weekly data snapshot, the Police Departtment receives
 map PDF files containing the results of the optimal and emerging hot
-spot analyses
+spot analyses.  These files are generated within the internal web map distributed 
+on the City of Covington's ArcGIS online account.
 
 ![](images/arcgis_online_pdf.PNG)
 
@@ -167,7 +168,7 @@ emerging_list = [Burglary_Emerging_Final,
                  Vehicle_Mischief_Emerging_Final]
 
 
-#Merge layers and save
+#Merge layers and save--'TYPE' field is also include to distinguish between results
 arcpy.management.Merge(emerging_list,
                       arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp",  
                       'PATTERN "PATTERN" true true false 254 Text 0 0,First,#,
@@ -180,7 +181,7 @@ arcpy.management.Merge(emerging_list,
                       
 ```
 
-Keep on hexagons indicating a pattern is detected
+Keep only hot spot hexagons indicating a pattern is detected
 
 ``` python
 arcpy.analysis.Select(arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp", 
