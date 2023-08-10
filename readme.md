@@ -85,6 +85,7 @@ arcpy <- rpygeo_build_env(path = "C:/Program Files/ArcGIS/Pro/bin/Python/envs/ar
 
 ## Emerging Hotspots
 
+
 Create the space-time cubes
 
 ``` python
@@ -130,20 +131,48 @@ arcpy.management.CalculateField(theft_spot_path,                      #Emerging 
                                 '',
                                 "TEXT",                               #Data value type
                                 "NO_ENFORCE_DOMAINS")        
-        
 ```
 
 Create a copy of each emerging hot spot output layer
 
 ``` python
-arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot spot out to copy         
+arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot spot out to copy                 
           arcpy.env.workspace + "/VTheft_Emerging_Final.shp", #Where the output will be copied
           '', None, None, None)
 ```
 
 Merge the emerging hot spot analysis layers
 
+``` python
+Burglary_Emerging_Final = arcpy.env.workspace + "/Burglary_Emerging_Final.shp"
+VTheft_Emerging_Final = arcpy.env.workspace + "/VTheft_Emerging_Final.shp"
+Robbery_Emerging_Final = arcpy.env.workspace + "/Robbery_Emerging_Final.shp"
+Theft_From_Vehicle_Emerging_Final = arcpy.env.workspace + "/Theft_From_Vehicle_Emerging_Final.shp"
+Vehicle_Mischief_Emerging_Final = arcpy.env.workspace + "/Vehicle_Mischief_Emerging_Final.shp"
+
+
+emerging_list = [Burglary_Emerging_Final, VTheft_Emerging_Final, Robbery_Emerging_Final, Theft_From_Vehicle_Emerging_Final, Vehicle_Mischief_Emerging_Final]
+
+
+
+arcpy.management.Merge(emerging_list,
+                      arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp",  
+                      'PATTERN "PATTERN" true true false 254 Text 0 0,First,#,
+                      Burglary_Emerging_Final,PATTERN,0,254,
+                      VTheft_Emerging_Final,PATTERN,0,254,
+                      Robbery_Emerging_Final,PATTERN,0,254,
+                      Theft_From_Vehicle_Emerging_Final,PATTERN,0,254,
+                      Vehicle_Mischief_Emerging_Final,PATTERN,0,254', 
+                      "NO_SOURCE_INFO")
+                      
+```
+
 Keep on hexagons indicating a pattern is detected
 
-### Optimal Hotspots
+``` python
+arcpy.analysis.Select(arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp", 
+                      arcpy.env.workspace + "/Emerging_Hot_Spots_Final.shp", 
+                      "PATTERN NOT IN ('No Pattern Detected')")
+```
 
+### Optimal Hotspots
