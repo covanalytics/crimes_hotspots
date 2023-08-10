@@ -75,7 +75,7 @@ The weekly snapshot is created in the R script **weekly_snapshot.R**
 
 ## ArcGIS Pro
 
-We connect to the library of tools in ArcGIS Pro inside of Rstudio
+Connect to the library of tools in ArcGIS Pro inside of Rstudio using R script **arcgispro_connection.R**
 
 ``` r
 arcpy <- rpygeo_build_env(path = "C:/Program Files/ArcGIS/Pro/bin/Python/envs/arcgispro-py3/python.exe", 
@@ -97,7 +97,7 @@ arcpy.stpm.CreateSpaceTimeCube(theft_prj,         #Projected shapefile
                                "1 Weeks",         #Time step interval
                                "END_TIME",        #Time step alignment; how aggregation occurs
                                None, 
-                               "1800 Feet",        #Size of bins to aggregate points
+                               "1800 Feet",       #Size of bins to aggregate points
                                "Count SUM ZEROS", #Summary fields
                                "HEXAGON_GRID",    #The shape of the polygon mesh to aggregate points
                                None, None)
@@ -136,7 +136,7 @@ arcpy.management.CalculateField(theft_spot_path,                      #Emerging 
 Create a copy of each emerging hot spot output layer
 
 ``` python
-arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot spot out to copy
+arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot spot output to copy
           arcpy.env.workspace + "/VTheft_Emerging_Final.shp", #Where the output will be copied
           '', None, None, None)
 ```
@@ -145,7 +145,6 @@ Merge the emerging hot spot analysis layers
 
 ``` python
 #Layers to merge
-
 Burglary_Emerging_Final = arcpy.env.workspace + "/Burglary_Emerging_Final.shp"
 VTheft_Emerging_Final = arcpy.env.workspace + "/VTheft_Emerging_Final.shp"
 Robbery_Emerging_Final = arcpy.env.workspace + "/Robbery_Emerging_Final.shp"
@@ -154,7 +153,6 @@ Vehicle_Mischief_Emerging_Final = arcpy.env.workspace + "/Vehicle_Mischief_Emerg
 
 
 #List of list layers
-
 emerging_list = [Burglary_Emerging_Final,
                  VTheft_Emerging_Final, 
                  Robbery_Emerging_Final, 
@@ -162,7 +160,7 @@ emerging_list = [Burglary_Emerging_Final,
                  Vehicle_Mischief_Emerging_Final]
 
 
-#Mege layers and save
+#Merge layers and save
 arcpy.management.Merge(emerging_list,
                       arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp",  
                       'PATTERN "PATTERN" true true false 254 Text 0 0,First,#,
