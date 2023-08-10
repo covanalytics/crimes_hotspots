@@ -70,6 +70,12 @@ The weekly snapshot is created in the R script **weekly_snapshot.R**
 
 ### Optimal and Emerging Hotspots
 
+In addition to the weekly data snapshot, the Police Departtment receives
+map PDF files containing the results of the optimal and emerging hot
+spot analyses
+
+![](images/arcgis_online_pdf.PNG)
+
 # Creating Hotspots
 
 
