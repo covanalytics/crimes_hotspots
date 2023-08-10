@@ -72,6 +72,7 @@ The weekly snapshot is created in the R script **weekly_snapshot.R**
 
 # Creating Hotspots
 
+
 ## ArcGIS Pro
 
 We connect to the library of tools in ArcGIS Pro inside of Rstudio
@@ -82,9 +83,9 @@ arcpy <- rpygeo_build_env(path = "C:/Program Files/ArcGIS/Pro/bin/Python/envs/ar
                           extensions = "Spatial")
 ```
 
-### Emerging Hotspots
+## Emerging Hotspots
 
-Create space-time cube
+Create the space-time cubes
 
 ``` python
 theft_cube = arcpy.env.workspace + "/vtheft_cube_weekly.nc"
@@ -95,13 +96,13 @@ arcpy.stpm.CreateSpaceTimeCube(theft_prj,         #Projected shapefile
                                "1 Weeks",         #Time step interval
                                "END_TIME",        #Time step alignment; how aggregation occurs
                                None, 
-                               "300 Feet",        #Size of bins to aggregate points
+                               "1800 Feet",        #Size of bins to aggregate points
                                "Count SUM ZEROS", #Summary fields
                                "HEXAGON_GRID",    #The shape of the polygon mesh to aggregate points
                                None, None)
 ```
 
-Analysis
+Perform the emerging hot spot analysis
 
 ``` python
 theft_spot_path = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb/VTheft_Analysis_Emerging_HotSpot"
@@ -110,14 +111,18 @@ with arcpy.EnvManager(scratchWorkspace = arcpy.env.workspace + "/Weekly_Crime_Ho
                       arcpy.stpm.EmergingHotSpotAnalysis(theft_cube,  #Space-time cube to use
                       "COUNT_SUM_ZEROS",                              #The analysis variable to use
                        theft_spot_path,                               #The output path
-                       "300 Feet",                                    #The size of the analysis area
-                       1,                                             #Number of time-step intervals
+                       "1800 Feet",                                   #The size of the analysis area
+                       2,                                             #Number of time-step intervals
                        None, 
                        "FIXED_DISTANCE",                              #Define spatial relationships
-                       None, 
-                       "ENTIRE_CUBE")                                 #Define global window
-                       
-#Calculate field for emerging hotspot analysis output                       
+                       6,                                             #Number of spatial neighbors
+                       "ENTIRE_CUBE")                                 #Define global window; 
+                                                                      #looking at overall pattern in cube
+```
+
+Calculate a field to label the results of the emerging hot spot analysis
+
+``` pytnon
 arcpy.management.CalculateField(theft_spot_path,                      #Emerging hotspot analysis output
                                 "TYPE",                               #The field that will be updated
                                 '"Theft-Motor Vehicle"',              #The update
@@ -125,7 +130,20 @@ arcpy.management.CalculateField(theft_spot_path,                      #Emerging 
                                 '',
                                 "TEXT",                               #Data value type
                                 "NO_ENFORCE_DOMAINS")        
+        
 ```
+
+Create a copy of each emerging hot spot output layer
+
+``` python
+arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot spot out to copy                 
+          arcpy.env.workspace + "/VTheft_Emerging_Final.shp", #Where the output will be copied
+          '', None, None, None)
+```
+
+Merge the emerging hot spot analysis layers
+
+Keep on hexagons indicating a pattern is detected
 
 ### Optimal Hotspots
 
