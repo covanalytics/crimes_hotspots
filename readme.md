@@ -168,7 +168,7 @@ emerging_list = [Burglary_Emerging_Final,
                  Vehicle_Mischief_Emerging_Final]
 
 
-#Merge layers and save--'TYPE' field is also include to distinguish between results
+#Merge layers and save--'TYPE' field is also included to distinguish between results
 arcpy.management.Merge(emerging_list,
                       arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp",  
                       'PATTERN "PATTERN" true true false 254 Text 0 0,First,#,
