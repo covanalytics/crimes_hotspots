@@ -76,6 +76,7 @@ spot analyses
 
 ![](images/arcgis_online_pdf.PNG)
 
+
 # Creating Hotspots
 
 
