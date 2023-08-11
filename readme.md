@@ -55,7 +55,7 @@ The daily 24 hour shift report files are processed in the R script
 formats, and adds new features and stores new spatial data files that
 are needed to generate hot spot models and weekly snapshots of crimes.
 
-# Products Distributed
+# Data Products
 
 ### Weekly Data Snapshot
 
@@ -85,7 +85,7 @@ that is distributed on the City of Covington’s ArcGIS online platform.
 ![](images/arcgis_online_pdf.PNG)
 
 
-# Creating Hotspots
+# Hotspot Models
 
 
 ## ArcGIS Pro
@@ -98,8 +98,7 @@ arcpy <- rpygeo_build_env(path = "C:/Program Files/ArcGIS/Pro/bin/Python/envs/ar
                           extensions = "Spatial")
 ```
 
-## Emerging Hotspots
-
+## Emerging Hot Spots
 
 Create the space-time cubes
 
@@ -136,64 +135,31 @@ with arcpy.EnvManager(scratchWorkspace = arcpy.env.workspace + "/Weekly_Crime_Ho
                                                                       #looking at overall pattern in cube
 ```
 
-Calculate a field to label the results of the emerging hot spot analysis
+## Optimized Hot Spots
+
+Create minimum bounding box based on projected points
 
 ``` python
-arcpy.management.CalculateField(theft_spot_path,                      #Emerging hot spot analysis output
-                                "TYPE",                               #The field that will be updated
-                                '"Theft-Motor Vehicle"',              #The update
-                                "PYTHON3",                            #The type of expression to use
-                                '',
-                                "TEXT",                               #Data value type
-                                "NO_ENFORCE_DOMAINS")        
+theft_box = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb/theft_box"
+arcpy.management.MinimumBoundingGeometry(theft_prj,     #Project shapefile
+                                         theft_box,     #The output path
+                                         "CONVEX_HULL", #The minimum bounding geometry
+                                         "ALL",         #All points treated as one group
+                                         None,
+                                         "NO_MBG_FIELDS") 
 ```
 
-Create a copy of each emerging hot spot output layer
+Optimized Hot Spot Masked to Minimum Bounding of Project Points
 
 ``` python
-arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot spot output to copy
-          arcpy.env.workspace + "/VTheft_Emerging_Final.shp", #Where the output will be copied
-          '', None, None, None)
+theft_hot_spot = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb/Theft_OptimizedHotSpotAnalysis"
+arcpy.stats.OptimizedHotSpotAnalysis(theft_prj,                                #Projected shapefile
+                                     theft_hot_spot,                           #Output path
+                                     None,                                     #Hot spots based on density
+                                     "COUNT_INCIDENTS_WITHIN_HEXAGON_POLYGONS",#Aggregation method 
+                                     theft_box,                                #Bounding box where incidents occur
+                                     None, 
+                                     None, 
+                                     "300 Feet",                               #Hexagon size 
+                                     "600 Feet")                               #Neighborhood size for clustering
 ```
-
-Merge the emerging hot spot analysis layers
-
-``` python
-#Layers to merge
-Burglary_Emerging_Final = arcpy.env.workspace + "/Burglary_Emerging_Final.shp"
-VTheft_Emerging_Final = arcpy.env.workspace + "/VTheft_Emerging_Final.shp"
-Robbery_Emerging_Final = arcpy.env.workspace + "/Robbery_Emerging_Final.shp"
-Theft_From_Vehicle_Emerging_Final = arcpy.env.workspace + "/Theft_From_Vehicle_Emerging_Final.shp"
-Vehicle_Mischief_Emerging_Final = arcpy.env.workspace + "/Vehicle_Mischief_Emerging_Final.shp"
-
-
-#List of list layers
-emerging_list = [Burglary_Emerging_Final,
-                 VTheft_Emerging_Final, 
-                 Robbery_Emerging_Final, 
-                 Theft_From_Vehicle_Emerging_Final, 
-                 Vehicle_Mischief_Emerging_Final]
-
-
-#Merge layers and save--'TYPE' field is also included to distinguish between results
-arcpy.management.Merge(emerging_list,
-                      arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp",  
-                      'PATTERN "PATTERN" true true false 254 Text 0 0,First,#,
-                      Burglary_Emerging_Final,PATTERN,0,254,
-                      VTheft_Emerging_Final,PATTERN,0,254,
-                      Robbery_Emerging_Final,PATTERN,0,254,
-                      Theft_From_Vehicle_Emerging_Final,PATTERN,0,254,
-                      Vehicle_Mischief_Emerging_Final,PATTERN,0,254', 
-                      "NO_SOURCE_INFO")
-                      
-```
-
-Keep only hot spot hexagons indicating a pattern is detected
-
-``` python
-arcpy.analysis.Select(arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp", 
-                      arcpy.env.workspace + "/Emerging_Hot_Spots_Final.shp", 
-                      "PATTERN NOT IN ('No Pattern Detected')")
-```
-
-### Optimal Hotspots
