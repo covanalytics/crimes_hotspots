@@ -182,20 +182,3 @@ ggsave(paste(map_dir, "/crime_snapshot_",
              today(), 
              ".png", 
              sep = ""), crime_snap, width = 8, height = 7, units = "in", dpi = 120)
-
-
-
-crimes <- st_read("U:/Mapping/Police/Crimes.shp")
-crimes_sf <- st_transform(crimes, crs = 4326)%>%
-  filter(!grepl("South Covington", NbhdLbl))
-
-saveRDS(crimes_sf, "C:/Users/tsink/Documents/covdata_graphics/data/police/crimes.rds")
-
-density <- st_read("C:/Users/tsink/Documents/ArcGIS/Projects/Weekly_Crime_Hotspot/Crimes_Density_Polygon.shp")
-density_sf <- st_transform(density, crs = 4326) %>%
-  filter(ContourMin > 1)
-
-saveRDS(density_sf, "C:/Users/tsink/Documents/covdata_graphics/data/police/crimes_density.rds")
-
-
-
