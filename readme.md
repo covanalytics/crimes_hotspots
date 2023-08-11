@@ -157,9 +157,9 @@ arcpy.stats.OptimizedHotSpotAnalysis(theft_prj,                                #
                                      theft_hot_spot,                           #Output path
                                      None,                                     #Hot spots based on density
                                      "COUNT_INCIDENTS_WITHIN_HEXAGON_POLYGONS",#Aggregation method 
-                                     theft_box,                                #Bounding box where incidents occur
+                                     theft_box,                                #Bounding box
                                      None, 
                                      None, 
                                      "300 Feet",                               #Hexagon size 
-                                     "600 Feet")                               #Neighborhood size for clustering
+                                     "600 Feet")                               #Neighborhood size
 ```
