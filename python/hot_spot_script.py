@@ -7,7 +7,7 @@ from datetime import date
 import datetime
 
 
-arcpy.env.workspace = "C:/Users/tsink/Documents/ArcGIS/Projects/Weekly_Crime_Hotspot"
+arcpy.env.workspace = ".../Projects/Weekly_Crime_Hotspot"
 
 today = datetime.date.today()
 today_name = today.strftime('%b_%d_%Y')
