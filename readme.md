@@ -85,18 +85,21 @@ that is distributed on the City of Covington’s ArcGIS online platform.
 ![](images/arcgis_online_pdf.PNG)
 
 
-# Hotspot Models
-
+# Hot Spot Models
 
 ## ArcGIS Pro
 
-Connect to the library of tools in ArcGIS Pro inside of Rstudio using R script **arcgispro_connection.R**
+Connect to the library of tools in ArcGIS Pro inside of Rstudio using R
+script **arcgispro_connection.R**
 
 ``` r
-arcpy <- rpygeo_build_env(path = "C:/Program Files/ArcGIS/Pro/bin/Python/envs/arcgispro-py3/python.exe", 
+arcpy <- rpygeo_build_env(path = "...ArcGIS/Pro/bin/Python/envs/arcgispro-py3/python.exe", 
                           overwrite = TRUE,
                           extensions = "Spatial")
 ```
+
+See the python script **hot_spot_script.py** for the complete code used
+to run hot spot models
 
 ## Emerging Hot Spots
 
@@ -149,7 +152,7 @@ arcpy.management.MinimumBoundingGeometry(theft_prj,     #Project shapefile
                                          "NO_MBG_FIELDS") 
 ```
 
-Optimized Hot Spot Masked to Minimum Bounding of Project Points
+Optimized hot spot masked to minimum bounding box of projected points
 
 ``` python
 theft_hot_spot = arcpy.env.workspace + "/Weekly_Crime_Hotspot.gdb/Theft_OptimizedHotSpotAnalysis"
