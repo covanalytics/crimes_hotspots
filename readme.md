@@ -72,8 +72,15 @@ The weekly snapshot is created in the R script **weekly_snapshot.R**
 
 In addition to the weekly data snapshot, the Police Departtment receives
 map PDF files containing the results of the optimal and emerging hot
-spot analyses.  These files are generated within the internal web map distributed 
-on the City of Covington's ArcGIS online account.
+spot analyses. These files are generated within the internal web map
+that is distributed on the City of Covington’s ArcGIS online platform.
+
+-   Emerging Hot Spot Analysis – identifies trends in reported crimes,
+    such as new, intensifying, diminishing, and sporadic hot and cold
+    spots
+
+-   Optimal Hot Spot Analysis – aggregates reported crimes into weighted
+    features to yield optimal hot spot results.
 
 ![](images/arcgis_online_pdf.PNG)
 
@@ -132,7 +139,7 @@ with arcpy.EnvManager(scratchWorkspace = arcpy.env.workspace + "/Weekly_Crime_Ho
 Calculate a field to label the results of the emerging hot spot analysis
 
 ``` python
-arcpy.management.CalculateField(theft_spot_path,                      #Emerging hotspot analysis output
+arcpy.management.CalculateField(theft_spot_path,                      #Emerging hot spot analysis output
                                 "TYPE",                               #The field that will be updated
                                 '"Theft-Motor Vehicle"',              #The update
                                 "PYTHON3",                            #The type of expression to use

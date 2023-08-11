@@ -61,7 +61,14 @@ The weekly snapshot is created in the R script **weekly_snapshot.R**
 
 ### Optimal and Emerging Hotspots
 
-In addition to the weekly data snapshot, the Police Departtment receives map PDF files containing the results of the optimal and emerging hot spot analyses
+In addition to the weekly data snapshot, the Police Departtment receives
+map PDF files containing the results of the optimal and emerging hot
+spot analyses.  These files are generated within the internal web map that is distributed
+on the City of Covington's ArcGIS online platform.
+
+* Emerging Hot Spot Analysis -- identifies trends in reported crimes, such as new, intensifying, diminishing, and sporadic hot and cold spots
+
+* Optimal Hot Spot Analysis --  aggregates reported crimes into weighted features to yield optimal hot spot results.
 
 ![](images/arcgis_online_pdf.png)
 
@@ -78,8 +85,6 @@ arcpy <- rpygeo_build_env(path = "C:/Program Files/ArcGIS/Pro/bin/Python/envs/ar
                           extensions = "Spatial")
 
 ```
-
-
 
 
 
@@ -150,6 +155,7 @@ arcpy.management.CopyFeatures(theft_spot_path,                #The emerging hot 
           
 ```
 
+
 Merge the emerging hot spot analysis layers
 
 ```{python eval = FALSE}
@@ -164,7 +170,6 @@ Vehicle_Mischief_Emerging_Final = arcpy.env.workspace + "/Vehicle_Mischief_Emerg
 emerging_list = [Burglary_Emerging_Final, VTheft_Emerging_Final, Robbery_Emerging_Final, Theft_From_Vehicle_Emerging_Final, Vehicle_Mischief_Emerging_Final]
 
 
-
 arcpy.management.Merge(emerging_list,
                       arcpy.env.workspace + "/Emerging_Hot_Spots_FinalA.shp",  
 'PATTERN "PATTERN" true true false 254 Text 0 0,First,#, Burglary_Emerging_Final,PATTERN,0,254,VTheft_Emerging_Final,PATTERN,0,254,Robbery_Emerging_Final,PATTERN,0,254,Theft_From_Vehicle_Emerging_Final,PATTERN,0,254,Vehicle_Mischief_Emerging_Final,PATTERN,0,254;', "NO_SOURCE_INFO")
@@ -172,6 +177,7 @@ arcpy.management.Merge(emerging_list,
 
 
 ```
+
 
 Keep only hot spot hexagons indicating a pattern is detected
 
