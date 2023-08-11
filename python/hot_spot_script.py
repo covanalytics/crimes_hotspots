@@ -1,13 +1,11 @@
 
 
-#res = subprocess.call("Rscript U:/Projects/Police/R Files/crimes_hotspots.R", shell=True)
-#res
+
+
 import arcpy
-#from arcpy import env
 from datetime import date
 import datetime
 
-map_dir = "U:/Mapping/Police"
 
 arcpy.env.workspace = "C:/Users/tsink/Documents/ArcGIS/Projects/Weekly_Crime_Hotspot"
 
