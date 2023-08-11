@@ -110,7 +110,7 @@ crimes_ampm <- crimes_df %>%
   
   theme_bw()+
   scale_fill_manual(values=c('#c3b632','#3d134f'))+
-  ylim(c(0,50))+
+  ylim(c(0,80))+
   labs(caption = paste("","", "Weekly snapshot", 
                        today(), 
                        "City of Covington", sep = "\n"))+
@@ -178,7 +178,7 @@ crimes_ampm_bchrt <- crimes_df %>%
 crime_snap <- ggarrange(crime_hotspot, 
                         ggarrange(crimes_ampm, crimes_beat, crimes_ampm_bchrt, ncol = 3), nrow = 2)
 
-ggsave(paste("U:/Mapping/Police/crime_snapshot_", 
+ggsave(paste(map_dir, "/crime_snapshot_", 
              today(), 
              ".png", 
              sep = ""), crime_snap, width = 8, height = 7, units = "in", dpi = 120)
