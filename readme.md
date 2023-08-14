@@ -9,7 +9,7 @@
     <li><a href="#data-collection">Data Collection</a></li>
     <li><a href="#data-processing">Data Processing</a></li>
     <li><a href="#data-products">Data Products</a></li>
-    <li><a href="#hots-pot-models">Hot Spot Models</a></li>
+    <li><a href="#hot-spot-models">Hot Spot Models</a></li>
   </ol>
 
 
