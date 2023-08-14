@@ -2,17 +2,16 @@
 
 
 <!-- TABLE OF CONTENTS -->
-<details>
+
   <summary><b>Table of Contents</b></summary>
   <ol>
-    <li><a href="#project">Project</a></li>
+    <li><a href="#project-description">Project Description</a></li>
     <li><a href="#data-collection">Data Collection</a></li>
     <li><a href="#data-processing">Data Processing</a></li>
-    <li><a href="#weekly-data-snapshot">Weekly Data Snapshot</a></li>
-    <li><a href="#weekly-hotspot-models">Weekly Hotspot Models</a></li>
-    <li><a href="#model-presentation">Model Presentation</a></li>
+    <li><a href="#data-products">Data Products</a></li>
+    <li><a href="#hots-pot-models">Hot Spot Models</a></li>
   </ol>
-</details>
+
 
 
 # Project
