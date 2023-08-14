@@ -98,7 +98,7 @@ crime_hotspot <- qmplot(lon, lat, data = crimes_heat, geom = "blank", zoom = 14,
 #panel.border = element_rect(color = "black", fill=NA, size=1),
 #plot.background = element_rect(color = "black", size = 1))
 #labs(caption = paste(today(), "City of Covington", sep = "\n"))
-#ggsave(paste("U:/Mapping/Police/crime_hot_spots_type_", today(), ".png", sep = ""), crime_hotspot)
+
 
 #///////////////////////////////////////////////////////////// 
 ###3. Snapshot--Bar Chart by AM/PM----
