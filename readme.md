@@ -72,9 +72,9 @@ The weekly snapshot is created in the R script **weekly_snapshot.R**
 
 ![](images/crime_snapshot_2023-08-08.png)
 
-### Optimal and Emerging Hotspots
+### Optimized and Emerging Hotspots
 
-In addition to the weekly data snapshot, the Police Departtment receives
+In addition to the weekly data snapshot, the Police Department receives
 map PDF files containing the results of the optimal and emerging hot
 spot analyses. These files are generated within the internal web map
 that is distributed on the City of Covington’s ArcGIS online platform.
@@ -83,7 +83,7 @@ that is distributed on the City of Covington’s ArcGIS online platform.
     such as new, intensifying, diminishing, and sporadic hot and cold
     spots
 
--   Optimal Hot Spot Analysis – aggregates reported crimes into weighted
+-   Optimized Hot Spot Analysis – aggregates reported crimes into weighted
     features to yield optimal hot spot results.
 
 ![](images/arcgis_online_pdf.PNG)
