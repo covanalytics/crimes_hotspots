@@ -13,7 +13,6 @@
   </ol>
 
 
-
 # Project Description
 
 - **Crimes Reported**: Burglary; Criminal Mischief-Auto; Robbery; Theft-From Motor Vehicle; Theft-Motor Vehicle 
