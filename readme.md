@@ -2,21 +2,28 @@
 
 
 <!-- TABLE OF CONTENTS -->
-<details>
+
   <summary><b>Table of Contents</b></summary>
   <ol>
-    <li><a href="#project">Project</a></li>
+    <li><a href="#project-description">Project Description</a></li>
     <li><a href="#data-collection">Data Collection</a></li>
     <li><a href="#data-processing">Data Processing</a></li>
-    <li><a href="#weekly-data-snapshot">Weekly Data Snapshot</a></li>
-    <li><a href="#weekly-hotspot-models">Weekly Hotspot Models</a></li>
-    <li><a href="#model-presentation">Model Presentation</a></li>
+    <li><a href="#data-products">Data Products</a></li>
+    <li><a href="#hot-spot-models">Hot Spot Models</a></li>
   </ol>
-</details>
 
+
+<<<<<<< HEAD
+# Project Description
+=======
 
 # Project Description
 
+_ **Crimes Reported**: Burglary; Criminal Mischief-Auto; Robbery; Theft-From Motor Vehicle; Theft-Motor Vehicle 
+
+- **Goal**: a reduction in crime and fear of crime.  In the higher crime areas if the subjects who are committing the crime see increased patrols, hopefully they will move on or they will be caught.  The residents and public feel safer because they are seeing an increase in patrols in these areas.
+
+- **Operations**: the reports are dispersed to the Police Department to pass on information as to where certain types of crimes are occurring and to identify trends in those locations.  They are used by the officers on the street to keep an eye out in high crime areas.  Shift supervisors use the information to properly disperse available manpower.  Based on the information in the reports, supervisors could load a beat with extra officers or move some from one area of town to another, which is very helpful when extra manpower is available.
 
 # Technology
 
