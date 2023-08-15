@@ -16,7 +16,7 @@
 
 # Project Description
 
-_ **Crimes Reported**: Burglary; Criminal Mischief-Auto; Robbery; Theft-From Motor Vehicle; Theft-Motor Vehicle 
+- **Crimes Reported**: Burglary; Criminal Mischief-Auto; Robbery; Theft-From Motor Vehicle; Theft-Motor Vehicle 
 
 - **Goal**: a reduction in crime and fear of crime.  In the higher crime areas if the subjects who are committing the crime see increased patrols, hopefully they will move on or they will be caught.  The residents and public feel safer because they are seeing an increase in patrols in these areas.
 
