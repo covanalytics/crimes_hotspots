@@ -13,9 +13,6 @@
   </ol>
 
 
-<<<<<<< HEAD
-# Project Description
-=======
 
 # Project Description
 
